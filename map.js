@@ -54,4 +54,26 @@ require(
     });
 
     graphicsLayer.add(pointGraphic);
+
+    const polyline = {
+      type: "polyline",
+      paths: [
+        [-118.821527826096, 34.0139576938577], //Longitude, latitude
+        [-118.814893761649, 34.0080602407843], //Longitude, latitude
+        [-118.808878330345, 34.0016642996246]  //Longitude, latitude
+      ]
+    }
+
+    const lineSymbol = {
+      type: "simple-line",
+      color: [226, 119, 40],
+      width: 4
+    }
+
+    const polylineGraphic = new Graphic({
+      geometry: polyline,
+      symbol: lineSymbol
+    });
+    
+    graphicsLayer.add(polylineGraphic);
 });
