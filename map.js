@@ -1,3 +1,16 @@
+// creates dummy data for the map points and lines in the form of an arc
+function createArc(start, end, maxHeight, numPoints = 100) {
+  const points = [];
+  for (let i = 0; i <= numPoints; i++) {
+    const t = i / numPoints;
+    const x = start.x + t * (end.x - start.x);
+    const y = start.y + t * (end.y - start.y);
+    const z = maxHeight * (1 - (2*t - 1)**2);
+    points.push({ x, y, z });
+  }
+  return points;
+}
+
 require(
   [
     "esri/config", 
@@ -6,7 +19,7 @@ require(
     "esri/Graphic",
     "esri/layers/GraphicsLayer",
   ], function(esriConfig, Map, SceneView, Graphic, GraphicsLayer) {
-  
+
     esriConfig.apiKey = "AAPK18b2e18170204bc6b4d16bee66e69afdkvVIvyYk4T2gtPkbxLqIWRX7Zxgpo_8fQYZ60kmRrsKvTtVNjto-_jzQ6UuD2Jy3";
 
     // Base map
@@ -33,41 +46,44 @@ require(
     const graphicsLayer = new GraphicsLayer();
     map.add(graphicsLayer);
 
-    const point = {
-      type: "point",
-      longitude: -118.80500,
-      latitude: 34.02700
-    }
-
     const markerSymbol = {
       type: "simple-marker",
-      color: [226, 119, 40],
-      outline: {
-        color: [255, 255, 255],
-        width: 1
+      color: [169, 169, 169], // Grey
+      size: 3 // Adjust the size value to make the symbol smaller
+    };
+
+    const pointsData = createArc(
+      { x: -118.821527826096, y: 34.0139576938577 },  // start of arc
+      { x: -118.508878330345, y: 33.9816642996246 },  // end of arc
+      10000,                                          // max height of arc
+      numPoints = 100                                 // number of points in arc
+    )
+
+    pointsData.forEach((current_point) => {
+      const point = {
+        type: "point",
+        x: current_point.x,
+        y: current_point.y,
+        z: current_point.z
       }
-    }
 
-    const pointGraphic = new Graphic({
-      geometry: point,
-      symbol: markerSymbol
+      const pointGraphic = new Graphic({
+        geometry: point,
+        symbol: markerSymbol
+      });
+
+      graphicsLayer.add(pointGraphic);
     });
-
-    graphicsLayer.add(pointGraphic);
-
-    const polyline = {
-      type: "polyline",
-      paths: [
-        [-118.821527826096, 34.0139576938577], //Longitude, latitude
-        [-118.814893761649, 34.0080602407843], //Longitude, latitude
-        [-118.808878330345, 34.0016642996246]  //Longitude, latitude
-      ]
-    }
 
     const lineSymbol = {
       type: "simple-line",
       color: [226, 119, 40],
       width: 4
+    }
+
+    const polyline = {
+      type: "polyline",
+      paths: pointsData.map((point) => [point.x, point.y, point.z])
     }
 
     const polylineGraphic = new Graphic({
