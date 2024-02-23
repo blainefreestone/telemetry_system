@@ -27,14 +27,22 @@ require(
     // Base map
 
     const map = new Map({
-      basemap: "arcgis/topographic" // basemap styles service
+      basemap: "arcgis/topographic",  // basemap styles service
+      ground: "world-elevation"       // elevation styles service
     });
 
     const view = new SceneView({
+      container: "viewDiv",
       map: map,
-      center: [-118.80543,34.02700], // Longitude, latitude
-      zoom: 13, // Zoom level
-      container: "viewDiv" // Div element
+      camera: {
+        position: [
+          -118.80500, // lon
+          34.02700,   // lat
+          2500        // elevation in meters
+        ],
+        tilt: 65,
+        heading: 360
+      }
     });
 
     // Simple renderers
@@ -110,12 +118,21 @@ require(
       }
     };
 
+    // Popup templates
+
+    const trailheadsPopup = {
+      "title": "Trailhead",
+      "content": "<b>Trail:</b> {TRL_NAME}<br><b>City:</b> {CITY_JUR}<br><b>Cross Street:</b> {X_STREET}<br><b>Parking:</b> {PARKING}<br><b>Elevation:</b> {ELEV_FT} ft"
+    }
+
     // Feature layers
 
     const trailheads = new FeatureLayer({
       url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trailheads/FeatureServer/0",
       renderer: trailHeadsRenderer,
-      labelingInfo: [trailheadsLabels]
+      labelingInfo: [trailheadsLabels],
+      outFields: ["TRL_NAME", "CITY_JUR", "X_STREET", "PARKING", "ELEV_FT"],
+      popupTemplate: trailheadsPopup
     });
 
     const trails = new FeatureLayer({
