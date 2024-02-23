@@ -29,6 +29,25 @@ require(
       }
     };
 
+    const trailsRenderer = { 
+      type: "simple",
+      symbol: {
+        type: "simple-line",
+        color: "#8A2BE2",
+        style: "solid"
+      },
+      visualVariables: [
+        {
+          type: "size",
+          field: "ELEV_GAIN",
+          minDataValue: 0,
+          maxDataValue: 2300,
+          minSize: "3px",
+          maxSize: "7px"
+        }
+      ]
+    };
+
     const trailheadsLabels = {
       symbol: {
         type: "text",
@@ -56,7 +75,9 @@ require(
     });
 
     const trails = new FeatureLayer({
-      url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trails/FeatureServer/0"
+      url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trails/FeatureServer/0",
+      renderer: trailsRenderer,
+      opacity: 0.75
     });
 
     const parks = new FeatureLayer({
