@@ -8,6 +8,24 @@ require(
   
     esriConfig.apiKey = "AAPK18b2e18170204bc6b4d16bee66e69afdkvVIvyYk4T2gtPkbxLqIWRX7Zxgpo_8fQYZ60kmRrsKvTtVNjto-_jzQ6UuD2Jy3";
 
+    // Add parks with a class breaks renderer and unique symbols
+    function createFillSymbol(value, color) {
+      return {
+        "value": value,
+        "symbol": {
+          "color": color,
+          "type": "simple-fill",
+          "style": "solid",
+          "outline": {
+            "style": "none"
+          }
+        },
+        "label": value
+      };
+    }
+
+    // Base map
+
     const map = new Map({
       basemap: "arcgis/topographic" // basemap styles service
     });
@@ -18,6 +36,8 @@ require(
       zoom: 13, // Zoom level
       container: "viewDiv" // Div element
     });
+
+    // Simple renderers
 
     const trailHeadsRenderer = {
       type: "simple",
@@ -48,6 +68,28 @@ require(
       ]
     };
 
+    const bikeTrailsRenderer = {
+      type: "simple",
+      symbol: {
+        type: "simple-line",
+        color: "#FF91FF",
+        style: "solid"
+      },
+    };
+
+    const parksRenderer = {
+      type: "unique-value",
+      field: "TYPE",
+      uniqueValueInfos: [
+        createFillSymbol("Natural Areas", "#9E559C"),
+        createFillSymbol("Regional Parks", "#A7C636"),
+        createFillSymbol("Open Space", "#149ECE"),
+        createFillSymbol("Local Parks", "#ED5151")
+      ]
+    };
+
+    // Feature layer styling misc.
+
     const trailheadsLabels = {
       symbol: {
         type: "text",
@@ -68,6 +110,8 @@ require(
       }
     };
 
+    // Feature layers
+
     const trailheads = new FeatureLayer({
       url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trailheads/FeatureServer/0",
       renderer: trailHeadsRenderer,
@@ -80,11 +124,22 @@ require(
       opacity: 0.75
     });
 
-    const parks = new FeatureLayer({
-      url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Parks_and_Open_Space/FeatureServer/0",
+    const bikeTrails = new FeatureLayer({
+      url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Trails/FeatureServer/0",
+      renderer1: bikeTrailsRenderer,
+      definitionExpression: "USE_BIKE = 'YES'"
     });
 
-    map.add(trailheads);  // adds the trailheads to the map
-    map.add(trails, 0);   // adds the trails to the map
-    map.add(parks, 0);    // adds the parks to the map 
+    const parks = new FeatureLayer({
+      url: "https://services3.arcgis.com/GVgbJbqm8hXASVYi/arcgis/rest/services/Parks_and_Open_Space/FeatureServer/0",
+      renderer: parksRenderer,
+      opacity: 0.2
+    });
+
+    // Add layers to the map
+
+    map.add(trailheads);    // adds the trailheads to the map
+    map.add(trails, 0);     // adds the trails to the map
+    map.add(bikeTrails, 1); // adds the bike trails to the map
+    map.add(parks, 0);      // adds the parks to the map 
 });
