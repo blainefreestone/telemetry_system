@@ -54,6 +54,21 @@ class MapComponent extends React.Component {
       this.state.points.forEach((point) => {
         this.graphicsLayer.add(point);
       });
+
+      // create a new line from the points
+      const line = {
+        type: "polyline",
+        paths: this.state.points.map((point) => [point.geometry.x, point.geometry.y, point.geometry.z])
+      }
+
+      // create a new line graphic
+      const lineGraphic = new Graphic({
+        geometry: line,
+        symbol: this.lineSymbol
+      });
+
+      // add the line to the graphics layer
+      this.graphicsLayer.add(lineGraphic);
     }
   }
 
@@ -102,7 +117,14 @@ class MapComponent extends React.Component {
       this.pointPopupTemplate = {
       title: "Information",
       content: "Latitude: {x} <br> Longitude: {y} <br> Altitude: {z} meters"
-    };
+      };
+
+      // Create the style for the line
+      const lineSymbol = {
+        type: "simple-line",
+        color: [226, 119, 40], // Orange
+        width: 4
+      };
     }
   }
 
