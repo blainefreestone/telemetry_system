@@ -5,6 +5,7 @@ import SceneView from '@arcgis/core/views/SceneView';
 import Graphic from '@arcgis/core/Graphic';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import AddPoint from './AddPoint';
+import mapConfig from '../config/mapConfig';
 
 // component to get and update map div
 class MapComponent extends React.Component {
@@ -74,13 +75,18 @@ class MapComponent extends React.Component {
 
   componentDidMount() {
     if (this.mapDiv.current) {
-      Config.apiKey = "AAPK18b2e18170204bc6b4d16bee66e69afdkvVIvyYk4T2gtPkbxLqIWRX7Zxgpo_8fQYZ60kmRrsKvTtVNjto-_jzQ6UuD2Jy3";
+      const {
+         apiKey, 
+         basemapConfig, 
+         markerSymbol, 
+         pointPopupTemplate, 
+         lineSymbol 
+      } = mapConfig;
+
+      Config.apiKey = apiKey;
 
       // Create the Map
-      this.map = new Map({
-        basemap: "arcgis/topographic",  // basemap styles service
-        ground: "world-elevation"       // elevation styles service
-      });
+      this.map = new Map(basemapConfig);
 
       // Create the SceneView
       this.view = new SceneView({
@@ -103,28 +109,13 @@ class MapComponent extends React.Component {
       this.map.add(this.graphicsLayer);
 
       // Create a symbol with style for the points
-      this.markerSymbol = {
-        type: "simple-marker",
-        color: [226, 119, 40], // Orange
-        outline: {
-          color: [200, 200, 200], // Grey
-          width: .75
-        },
-        size: 5 // Adjust the size value to make the symbol smaller
-      };
+      this.markerSymbol = markerSymbol;
 
       // Create a popup template for the points
-      this.pointPopupTemplate = {
-      title: "Information",
-      content: "Latitude: {x} <br> Longitude: {y} <br> Altitude: {z} meters"
-      };
+      this.pointPopupTemplate = pointPopupTemplate;
 
       // Create the style for the line
-      const lineSymbol = {
-        type: "simple-line",
-        color: [226, 119, 40], // Orange
-        width: 4
-      };
+      this.lineSymbol = lineSymbol;
     }
   }
 
