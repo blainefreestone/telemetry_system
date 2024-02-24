@@ -48,8 +48,12 @@ require(
 
     const markerSymbol = {
       type: "simple-marker",
-      color: [169, 169, 169], // Grey
-      size: 3 // Adjust the size value to make the symbol smaller
+      color: [226, 119, 40], // Orange
+      outline: {
+        color: [200, 200, 200], // Grey
+        width: .75
+      },
+      size: 5 // Adjust the size value to make the symbol smaller
     };
 
     const pointsData = createArc(
@@ -58,6 +62,12 @@ require(
       10000,                                          // max height of arc
       numPoints = 100                                 // number of points in arc
     )
+
+    const pointPopupTemplate = {
+      title: "Information",
+      content: "Latitude: {x} <br> Longitude: {y} <br> Altitude: {z} meters"
+    };
+
 
     pointsData.forEach((current_point) => {
       const point = {
@@ -69,7 +79,14 @@ require(
 
       const pointGraphic = new Graphic({
         geometry: point,
-        symbol: markerSymbol
+        symbol: markerSymbol,
+        outFields: ["*"],
+        attributes: {
+          x: current_point.x,
+          y: current_point.y,
+          z: Math.round(current_point.z)
+        },
+        popupTemplate: pointPopupTemplate,
       });
 
       graphicsLayer.add(pointGraphic);
@@ -77,7 +94,7 @@ require(
 
     const lineSymbol = {
       type: "simple-line",
-      color: [226, 119, 40],
+      color: [226, 119, 40], // Orange
       width: 4
     }
 
