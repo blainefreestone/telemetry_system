@@ -6,6 +6,7 @@ import Graphic from '@arcgis/core/Graphic';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import AddPoint from './AddPoint';
 import mapConfig from '../config/mapConfig';
+import io from 'socket.io-client';
 
 // component to get and update map div
 class MapComponent extends React.Component {
@@ -82,6 +83,10 @@ class MapComponent extends React.Component {
          pointPopupTemplate, 
          lineSymbol 
       } = mapConfig;
+
+      console.log('Connecting to server');
+
+      this.socket = io('http://127.0.0.1:5000');
 
       Config.apiKey = apiKey;
 
