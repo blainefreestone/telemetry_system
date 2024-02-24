@@ -22,16 +22,19 @@ require(
 
     esriConfig.apiKey = "AAPK18b2e18170204bc6b4d16bee66e69afdkvVIvyYk4T2gtPkbxLqIWRX7Zxgpo_8fQYZ60kmRrsKvTtVNjto-_jzQ6UuD2Jy3";
 
-    // Base map
+    // Create the base map
 
     const map = new Map({
       basemap: "arcgis/topographic",  // basemap styles service
       ground: "world-elevation"       // elevation styles service
     });
 
+    // Create the SceneView
+
     const view = new SceneView({
-      container: "viewDiv",
+      container: "viewDiv",   // HTML element to place the map
       map: map,
+      // starting position of the camera
       camera: {
         position: [
           -118.80500, // lon
@@ -43,9 +46,11 @@ require(
       }
     }); 
 
+    // Create a graphics layer to hold the points and lines
     const graphicsLayer = new GraphicsLayer();
     map.add(graphicsLayer);
 
+    // Create a symbol with style for the points
     const markerSymbol = {
       type: "simple-marker",
       color: [226, 119, 40], // Orange
@@ -56,6 +61,7 @@ require(
       size: 5 // Adjust the size value to make the symbol smaller
     };
 
+    // Get dummy points data in the form of an arc
     const pointsData = createArc(
       { x: -118.821527826096, y: 34.0139576938577 },  // start of arc
       { x: -118.508878330345, y: 33.9816642996246 },  // end of arc
@@ -63,12 +69,13 @@ require(
       numPoints = 100                                 // number of points in arc
     )
 
+    // Create a popup template for the points
     const pointPopupTemplate = {
       title: "Information",
       content: "Latitude: {x} <br> Longitude: {y} <br> Altitude: {z} meters"
     };
 
-
+    // Create a point graphic for each point in the data and add to the graphics layer
     pointsData.forEach((current_point) => {
       const point = {
         type: "point",
@@ -92,6 +99,7 @@ require(
       graphicsLayer.add(pointGraphic);
     });
 
+    // Create a symbol with style for the lines
     const lineSymbol = {
       type: "simple-line",
       color: [226, 119, 40], // Orange
@@ -103,6 +111,7 @@ require(
       paths: pointsData.map((point) => [point.x, point.y, point.z])
     }
 
+    // Create a polyline graphic for the line and add to the graphics layer
     const polylineGraphic = new Graphic({
       geometry: polyline,
       symbol: lineSymbol
