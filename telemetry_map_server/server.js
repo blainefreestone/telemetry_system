@@ -43,7 +43,7 @@ function sendDataToClient(data) {
     }
 };
 
-function processHardwareData(data) {
+const processHardwareData = (data) => {
     const points = createArc(
         { x: -118.821527826096, y: 34.0139576938577 },  // start of arc
         { x: -118.508878330345, y: 33.9816642996246 },  // end of arc

@@ -4,7 +4,6 @@ import Map from '@arcgis/core/Map';
 import SceneView from '@arcgis/core/views/SceneView';
 import Graphic from '@arcgis/core/Graphic';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
-import AddPoint from './AddPoint';
 import mapConfig from '../config/mapConfig';
 import io from 'socket.io-client';
 
