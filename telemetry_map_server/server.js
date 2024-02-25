@@ -1,5 +1,6 @@
 const http = require('http');
 const socketIo = require('socket.io');
+const readline = require('readline');
 
 // Create a new HTTP server
 const server = http.createServer();
@@ -11,17 +12,21 @@ const io = socketIo(server, {
     }
 });
 
+// no connection socket yet
+let connectionSocket = null;
+
 // set up event listener for new connections
 io.on('connection', (socket) => {
     // log new connection
     console.log('New connection');
-
-    socket.emit('data', { message: "Hello world!" });
+    connectionSocket = socket;
 
     // set up event listener for disconnections
     socket.on('disconnect', () => {
         // log disconnection
         console.log('User disconnected');
+        // reset connection socket to null
+        connectionSocket = null;
     });
 });
 
@@ -29,4 +34,50 @@ io.on('connection', (socket) => {
 server.listen(5000, '127.0.0.1', () => {
     // indicate server is listening
     console.log('Server is running');
+});
+
+// sends data to client
+function sendDataToClient(data) {
+    if (connectionSocket) {
+        connectionSocket.emit('data', data);
+    }
+};
+
+function processHardwareData(data) {
+    const points = createArc(
+        { x: -118.821527826096, y: 34.0139576938577 },  // start of arc
+        { x: -118.508878330345, y: 33.9816642996246 },  // end of arc
+        10000,                                          // max height of arc
+        100                                             // number of points in arc
+    )
+    points.forEach((point, index) => {
+        setTimeout(() => {
+            sendDataToClient(point);
+        }, index * 100); // Wait half a second (500 milliseconds) for each point
+    });
+};
+
+const createArc = (start, end, maxHeight, numPoints) => {
+    const points = [];
+    for (let i = 0; i <= numPoints; i++) {
+        const t = i / numPoints;
+        const x = start.x + t * (end.x - start.x);
+        const y = start.y + t * (end.y - start.y);
+        const z = maxHeight * (1 - (2*t - 1)**2);
+        points.push({ x, y, z });
+    }
+    return points;
+}
+
+// Set up readline to read input from the command line
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+  
+rl.on('line', (input) => {
+    // If the input is 'trigger', call processHardwareData
+    if (input.trim() === 'trigger') {
+        processHardwareData({ x: -118.821527826096, y: 34.0139576938577 },  { x: -118.508878330345, y: 33.9816642996246 },  10000, 100);
+    }
 });

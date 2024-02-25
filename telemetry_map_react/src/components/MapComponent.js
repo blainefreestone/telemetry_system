@@ -88,7 +88,7 @@ class MapComponent extends React.Component {
 
       // listen for data from server
       this.socket.on('data', (data) => {
-        console.log('Data received:', data);
+        this.addPoint(data)
       });
 
       Config.apiKey = apiKey;
@@ -131,7 +131,6 @@ class MapComponent extends React.Component {
     return (
       <>
         <div ref={this.mapDiv} style={{ width: '90%', height: '90vh' }}></div>
-        <AddPoint  addPoint={this.addPoint}/>
       </>
     );
   }
