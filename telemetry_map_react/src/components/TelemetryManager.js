@@ -1,6 +1,9 @@
 import React from 'react';
 import MapComponent from './MapComponent';
 import RealTimeDataDisplay from './RealTimeDataDisplay';
+import Graphic from '@arcgis/core/Graphic';
+import mapConfig from '../config/mapConfig';
+import io from 'socket.io-client';
 
 class TelemetryManager extends React.Component {
     constructor(props) {
@@ -8,6 +11,7 @@ class TelemetryManager extends React.Component {
 
         this.state = {
             points: [],
+            pointGraphics: [],
         }
     }
 
@@ -23,9 +27,11 @@ class TelemetryManager extends React.Component {
     }
 
     handleDataReceived = (data) => {
+        const point = this.createPoint(data);
         // add the new point to the state
         this.setState(prevState => ({
-            points: [...prevState.points, this.createPoint(data)],
+            points: [...prevState.points, point],
+            pointGraphics: [...prevState.pointGraphics, this.createPointGraphic(point)]
         }));
     }
 
@@ -41,11 +47,39 @@ class TelemetryManager extends React.Component {
         return point;
     }
 
+    createPointGraphic = (point) => {
+        // Create a graphic for the new point
+        const pointGraphic = new Graphic({
+            geometry: point,
+            symbol: this.markerSymbol,
+            outFields: ["*"],
+            attributes: {
+            x: point.x,
+            y: point.y,
+            z: Math.round(point.z)
+            },
+            popupTemplate: this.pointPopupTemplate,
+        })
+
+        return pointGraphic;
+    }
+
+    componentDidMount() {
+        this.pointPopupTemplate = mapConfig.pointPopupTemplate;
+
+        // connect to the server
+        this.connectToServer();
+    }
+
     render() {
+        // get the last point from the state if it exists
+        const lastPoint = this.state.points.length > 0 ? this.state.points[this.state.points.length - 1] : null;
+        const lastPointGraphic = lastPoint ? this.createPointGraphic(lastPoint) : null;
+
         return (
             <>
-                <MapComponent />
-                <RealTimeDataDisplay />
+                <MapComponent pointGraphics = {this.state.pointGraphics} lastPointGraphic = {lastPointGraphic} />
+                <RealTimeDataDisplay point = {lastPoint} />
             </>
         )
     }

@@ -5,9 +5,17 @@ class RealTimeDataDisplay extends React.Component {
         super(props);
         // set initial state
         this.state = {
-            x: 0,
-            y: 0,
-            z: 0,
+            point: null,
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        // check if the point prop has changed
+        if (prevProps.point !== this.props.point) {
+            // update the state with the new point
+            this.setState({
+                point: this.props.point,
+            });
         }
     }
 
@@ -21,11 +29,13 @@ class RealTimeDataDisplay extends React.Component {
                         <th>Y</th>
                         <th>Z</th>
                     </tr>
-                    <tr>
-                        <td>{this.state.x}</td>
-                        <td>{this.state.y}</td>
-                        <td>{this.state.z}</td>
-                    </tr>
+                    {this.state.point && (
+                        <tr>
+                            <td>{this.state.point.x}</td>
+                            <td>{this.state.point.y}</td>
+                            <td>{this.state.point.z}</td>
+                        </tr>
+                    )}
                 </table>
             </>
         )
