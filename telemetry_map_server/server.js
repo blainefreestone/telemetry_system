@@ -15,6 +15,9 @@ const io = socketIo(server, {
 io.on('connection', (socket) => {
     // log new connection
     console.log('New connection');
+
+    socket.emit('data', { message: "Hello world!" });
+
     // set up event listener for disconnections
     socket.on('disconnect', () => {
         // log disconnection

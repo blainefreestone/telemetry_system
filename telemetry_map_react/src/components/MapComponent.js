@@ -84,9 +84,12 @@ class MapComponent extends React.Component {
          lineSymbol 
       } = mapConfig;
 
-      console.log('Connecting to server');
-
       this.socket = io('http://127.0.0.1:5000');
+
+      // listen for data from server
+      this.socket.on('data', (data) => {
+        console.log('Data received:', data);
+      });
 
       Config.apiKey = apiKey;
 
