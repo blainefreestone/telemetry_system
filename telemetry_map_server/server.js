@@ -21,6 +21,11 @@ io.on('connection', (socket) => {
     console.log('New connection');
     connectionSocket = socket;
 
+    socket.on('trigger', () => {
+        console.log('Trigger received');
+        processHardwareData({ x: -118.821527826096, y: 34.0139576938577 },  { x: -118.508878330345, y: 33.9816642996246 },  10000, 100);
+    });
+
     // set up event listener for disconnections
     socket.on('disconnect', () => {
         // log disconnection
@@ -35,6 +40,8 @@ server.listen(5000, '127.0.0.1', () => {
     // indicate server is listening
     console.log('Server is running');
 });
+
+
 
 // sends data to client
 function sendDataToClient(data) {
@@ -68,16 +75,3 @@ const createArc = (start, end, maxHeight, numPoints) => {
     }
     return points;
 }
-
-// Set up readline to read input from the command line
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-  
-rl.on('line', (input) => {
-    // If the input is 'trigger', call processHardwareData
-    if (input.trim() === 'trigger') {
-        processHardwareData({ x: -118.821527826096, y: 34.0139576938577 },  { x: -118.508878330345, y: 33.9816642996246 },  10000, 100);
-    }
-});

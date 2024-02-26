@@ -50,6 +50,16 @@ class TelemetryManager extends React.Component {
         });
     }
 
+    disconnectFromServer = () => {
+        // disconnect from the server
+        this.socket.close();
+    }
+
+    requestData = () => {
+        // request data from the server
+        this.socket.emit('trigger');
+    }
+
     handleDataReceived = (data) => {
         const point = this.createPoint(data);
         // add the new point to the state
@@ -103,7 +113,7 @@ class TelemetryManager extends React.Component {
                     <MapComponent pointGraphics = {this.state.pointGraphics} lastPointGraphic = {lastPointGraphic} />
                     <div className="realTimeDataDisplay"><RealTimeDataDisplay point = {lastPoint} /></div>
                 </div>
-                <ControlPanel connectToServer = {this.connectToServer} connected = {this.state.connected} />
+                <ControlPanel connectToServer = {this.connectToServer} disconnectFromServer = {this.disconnectFromServer} requestData = {this.requestData} connected = {this.state.connected} />
             </>
         )
     }
