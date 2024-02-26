@@ -1,11 +1,13 @@
 const http = require('http');
 const socketIo = require('socket.io');
-const readline = require('readline');
+const { startHardwareListener } =  require('./hardware.js');
+const { start } = require('repl');
 
 // Create a new HTTP server
 const server = http.createServer();
 // Create a new socket.io server
 const io = socketIo(server, {
+    // provide proper CORS settings to avoid cross origin request errors
     cors: {
         origin: "*",
         methods: ["GET", "POST"]
@@ -23,7 +25,7 @@ io.on('connection', (socket) => {
 
     socket.on('trigger', () => {
         console.log('Trigger received');
-        processHardwareData({ x: -118.821527826096, y: 34.0139576938577 },  { x: -118.508878330345, y: 33.9816642996246 },  10000, 100);
+        startHardwareListener(sendDataToClient);
     });
 
     // set up event listener for disconnections
@@ -41,37 +43,9 @@ server.listen(5000, '127.0.0.1', () => {
     console.log('Server is running');
 });
 
-
-
 // sends data to client
 function sendDataToClient(data) {
     if (connectionSocket) {
         connectionSocket.emit('data', data);
     }
 };
-
-const processHardwareData = (data) => {
-    const points = createArc(
-        { x: -118.821527826096, y: 34.0139576938577 },  // start of arc
-        { x: -118.508878330345, y: 33.9816642996246 },  // end of arc
-        10000,                                          // max height of arc
-        100                                             // number of points in arc
-    )
-    points.forEach((point, index) => {
-        setTimeout(() => {
-            sendDataToClient(point);
-        }, index * 100); // Wait half a second (500 milliseconds) for each point
-    });
-};
-
-const createArc = (start, end, maxHeight, numPoints) => {
-    const points = [];
-    for (let i = 0; i <= numPoints; i++) {
-        const t = i / numPoints;
-        const x = (start.x + t * (end.x - start.x)).toFixed(5).padStart(9, '0');
-        const y = (start.y + t * (end.y - start.y)).toFixed(5).padStart(9, '0');
-        const z = Math.round(maxHeight * (1 - (2*t - 1)**2));
-        points.push({ x, y, z });
-    }
-    return points;
-}
