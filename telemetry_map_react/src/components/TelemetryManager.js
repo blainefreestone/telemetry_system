@@ -1,6 +1,7 @@
 import React from 'react';
 import MapComponent from './MapComponent';
 import RealTimeDataDisplay from './RealTimeDataDisplay';
+import ControlPanel from './ControlPanel';
 import Graphic from '@arcgis/core/Graphic';
 import mapConfig from '../config/mapConfig';
 import io from 'socket.io-client';
@@ -12,6 +13,7 @@ class TelemetryManager extends React.Component {
         this.state = {
             points: [],
             pointGraphics: [],
+            connected: false
         }
     }
 
@@ -19,10 +21,32 @@ class TelemetryManager extends React.Component {
         // connect to the server
         this.socket = io('http://127.0.0.1:5000');
 
-        // listen for data from server
-        this.socket.on('data', (data) => {
-            // when data is receieved
-            this.handleDataReceived(data);
+        // set the state to connected if the connection is successful
+        this.socket.on('connect', () => {
+            // listen for data from server
+            this.socket.on('data', (data) => {
+                // when data is receieved
+                this.handleDataReceived(data);
+            });
+            
+            this.setState({
+                connected: true
+            });
+        });
+        
+        this.socket.on('connect_error', () => {
+            // stop trying to connect if the connection failed
+            this.socket.close();
+        });
+
+        this.socket.on('disconnect', () => {
+            // set the state to disconnected if the connection is lost
+            this.setState({
+                connected: false
+            });
+
+            // stop trying to connect
+            this.socket.close();
         });
     }
 
@@ -66,9 +90,6 @@ class TelemetryManager extends React.Component {
 
     componentDidMount() {
         this.pointPopupTemplate = mapConfig.pointPopupTemplate;
-
-        // connect to the server
-        this.connectToServer();
     }
 
     render() {
@@ -77,12 +98,13 @@ class TelemetryManager extends React.Component {
         const lastPointGraphic = lastPoint ? this.createPointGraphic(lastPoint) : null;
 
         return (
-            <div className="app">
+            <>
                 <div className="top-section">
                     <MapComponent pointGraphics = {this.state.pointGraphics} lastPointGraphic = {lastPointGraphic} />
                     <div className="realTimeDataDisplay"><RealTimeDataDisplay point = {lastPoint} /></div>
                 </div>
-            </div>
+                <ControlPanel connectToServer = {this.connectToServer} connected = {this.state.connected} />
+            </>
         )
     }
 }

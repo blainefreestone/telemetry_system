@@ -100,7 +100,7 @@ class MapComponent extends React.Component {
     render() {
         return (
             <>
-                <div class="mapDiv" ref={this.mapDiv}></div>
+                <div className="mapDiv" ref={this.mapDiv}></div>
             </>
         );
     }
