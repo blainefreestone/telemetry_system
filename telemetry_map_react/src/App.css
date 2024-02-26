@@ -1,15 +1,60 @@
-/* styling for tables to be simplistic and minimalistic */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.top-section {
+  display: flex;
+  height: 90%;
+}
+
+.mapDiv {
+  width: 75%;
+}
+
+.realTimeDataDisplay {
+  display: block;
+  width: 25%;
+}
+
 table {
-  border-collapse: collapse;
+  display: table;
   width: 100%;
-  margin: 0 auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-size: 1.2em;
-  font-family: 'Roboto', sans-serif;
-  color: #444;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  text-align: center;
+  border-collapse: collapse;
+  color: #333;
+  background-color: #fff;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+table tr {
+  line-height: 1.5;
+}
+
+table tr:nth-child(even) {
+  background-color: #f0f0f0;
+}
+
+table tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+table td:first-child {
+  width: 50%;
+  color: #007BFF;
+}
+
+table td:nth-child(2) {
+  text-align: right;
+  width: 50%;
+  color: #28a745;
+}
+
+.buttons {
+  height: 10%;
 }

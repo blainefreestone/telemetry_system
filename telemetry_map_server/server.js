@@ -61,9 +61,9 @@ const createArc = (start, end, maxHeight, numPoints) => {
     const points = [];
     for (let i = 0; i <= numPoints; i++) {
         const t = i / numPoints;
-        const x = start.x + t * (end.x - start.x);
-        const y = start.y + t * (end.y - start.y);
-        const z = maxHeight * (1 - (2*t - 1)**2);
+        const x = (start.x + t * (end.x - start.x)).toFixed(5).padStart(9, '0');
+        const y = (start.y + t * (end.y - start.y)).toFixed(5).padStart(9, '0');
+        const z = Math.round(maxHeight * (1 - (2*t - 1)**2));
         points.push({ x, y, z });
     }
     return points;

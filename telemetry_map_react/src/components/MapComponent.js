@@ -100,7 +100,7 @@ class MapComponent extends React.Component {
     render() {
         return (
             <>
-                <div ref={this.mapDiv} style={{ width: '90%', height: '90vh' }}></div>
+                <div class="mapDiv" ref={this.mapDiv}></div>
             </>
         );
     }

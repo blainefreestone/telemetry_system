@@ -24,17 +24,36 @@ class RealTimeDataDisplay extends React.Component {
             // display the state values in a table
             <>
                 <table>
-                    <tr>
-                        <th>X</th>
-                        <th>Y</th>
-                        <th>Z</th>
-                    </tr>
-                    {this.state.point && (
-                        <tr>
-                            <td>{this.state.point.x}</td>
-                            <td>{this.state.point.y}</td>
-                            <td>{this.state.point.z}</td>
-                        </tr>
+                    {this.state.point ? (
+                        <>
+                            <tr>
+                                <td>Longitude</td>
+                                <td>{this.state.point.x}°</td>
+                            </tr>
+                            <tr>
+                                <td>Latitude</td>
+                                <td>{this.state.point.y}°</td>
+                            </tr>
+                            <tr>
+                                <td>Altitude</td>
+                                <td>{this.state.point.z}m</td>
+                            </tr>
+                        </>
+                    ) : (
+                        <>
+                            <tr>
+                                <td>Longitude</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Latitude</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Altitude</td>
+                                <td></td>
+                            </tr>
+                        </>
                     )}
                 </table>
             </>

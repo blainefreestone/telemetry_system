@@ -77,10 +77,12 @@ class TelemetryManager extends React.Component {
         const lastPointGraphic = lastPoint ? this.createPointGraphic(lastPoint) : null;
 
         return (
-            <>
-                <MapComponent pointGraphics = {this.state.pointGraphics} lastPointGraphic = {lastPointGraphic} />
-                <RealTimeDataDisplay point = {lastPoint} />
-            </>
+            <div className="app">
+                <div className="top-section">
+                    <MapComponent pointGraphics = {this.state.pointGraphics} lastPointGraphic = {lastPointGraphic} />
+                    <div className="realTimeDataDisplay"><RealTimeDataDisplay point = {lastPoint} /></div>
+                </div>
+            </div>
         )
     }
 }
