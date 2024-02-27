@@ -13,7 +13,8 @@ class TelemetryManager extends React.Component {
         this.state = {
             points: [],
             pointGraphics: [],
-            connected: false
+            connected: false,
+            heartbeat: false
         }
     }
 
@@ -31,6 +32,16 @@ class TelemetryManager extends React.Component {
 
             this.socket.on('heartbeat', (data) => {
                 console.log('Heartbeat received ' + data.timestamp);
+
+                // clear the previous timeout as heartbeat was received
+                clearTimeout(this.heartbeatTimeout);
+                // set new timeout for next heartbeat
+                this.heartbeatTimeout = setTimeout(this.handleMissedHeartbeat, 2000);
+
+                // set the heartbeat state to true
+                this.setState({
+                    heartbeat: true
+                });
             });
             
             this.setState({
@@ -71,6 +82,12 @@ class TelemetryManager extends React.Component {
             points: [...prevState.points, point],
             pointGraphics: [...prevState.pointGraphics, this.createPointGraphic(point)]
         }));
+    }
+
+    handleMissedHeartbeat = () => {
+        this.setState({
+            heartbeat: false
+        });
     }
 
     createPoint = (pointData) => {
@@ -117,7 +134,13 @@ class TelemetryManager extends React.Component {
                     <MapComponent pointGraphics = {this.state.pointGraphics} lastPointGraphic = {lastPointGraphic} />
                     <div className="realTimeDataDisplay"><RealTimeDataDisplay point = {lastPoint} /></div>
                 </div>
-                <ControlPanel connectToServer = {this.connectToServer} disconnectFromServer = {this.disconnectFromServer} requestData = {this.requestData} connected = {this.state.connected} />
+                <ControlPanel
+                    connectToServer={this.connectToServer}
+                    disconnectFromServer={this.disconnectFromServer}
+                    requestData={this.requestData}
+                    connected={this.state.connected}
+                    heartbeat={this.state.heartbeat}
+                />
             </>
         )
     }
