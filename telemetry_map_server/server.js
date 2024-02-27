@@ -23,9 +23,12 @@ io.on('connection', (socket) => {
     console.log('New connection');
     connectionSocket = socket;
 
+    // set up event listener for trigger
     socket.on('trigger', () => {
+        // log trigger received
         console.log('Trigger received');
-        startHardwareListener(sendDataToClient);
+        // start hardware listener
+        startHardwareListener(sendPointDataToClient);
     });
 
     // set up event listener for disconnections
@@ -35,6 +38,11 @@ io.on('connection', (socket) => {
         // reset connection socket to null
         connectionSocket = null;
     });
+
+    // set up heartbeat messages every second
+    heartbeatInterval = setInterval(() => {
+        sendHeartbeatToClient();
+    }, 1000);
 });
 
 // listen on port 5000 at local host ip
@@ -44,8 +52,14 @@ server.listen(5000, '127.0.0.1', () => {
 });
 
 // sends data to client
-function sendDataToClient(data) {
+function sendPointDataToClient(data) {
     if (connectionSocket) {
-        connectionSocket.emit('data', data);
+        connectionSocket.emit('pointData', data);
     }
 };
+
+function sendHeartbeatToClient() {
+    if (connectionSocket) {
+        connectionSocket.emit('heartbeat', {timestamp: Date.now()});
+    }
+}

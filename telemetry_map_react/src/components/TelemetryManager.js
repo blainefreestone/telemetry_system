@@ -24,9 +24,13 @@ class TelemetryManager extends React.Component {
         // set the state to connected if the connection is successful
         this.socket.on('connect', () => {
             // listen for data from server
-            this.socket.on('data', (data) => {
+            this.socket.on('pointData', (data) => {
                 // when data is receieved
                 this.handleDataReceived(data);
+            });
+
+            this.socket.on('heartbeat', (data) => {
+                console.log('Heartbeat received ' + data.timestamp);
             });
             
             this.setState({
