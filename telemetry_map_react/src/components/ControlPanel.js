@@ -1,6 +1,59 @@
 import React from 'react';
 
 class ControlPanel extends React.Component {
+    renderConnectionStatus = () => {
+        let divText, divClass;
+
+        if (this.props.connected) {
+            if (this.props.heartbeat) {
+                divText = " Good";
+                divClass = " connected status";
+            } else {
+                divText = " Bad";
+                divClass = " disconnected status";
+            }
+        } else {
+            divText = " Disconnected";
+            divClass = " disconnected status";
+        }
+
+        return (
+            <div>
+                Server Connection Status: 
+                <span className = {divClass} >
+                    {divText}
+                </span>
+            </div> 
+        )
+    }
+
+    renderHardwareConnectionStatus = () => {
+        let show, divText, divClass;
+
+        if (this.props.hardware && this.props.connected) {
+            show = true;
+            divText = " Good";
+            divClass = " connected status";
+        } else if (this.props.connected) {
+            show = true;
+            divText = " Disconnected";
+            divClass = " disconnected status";
+        } else {
+            show = false;
+        }
+
+        if (show) {
+            return (
+                <div>
+                    Hardware Connection Status: 
+                    <span className = {divClass} >
+                        {divText}
+                    </span>
+                </div>
+            )
+        }
+    }
+    
     render () {
         return (
             <div className="ControlPanel">
@@ -18,18 +71,9 @@ class ControlPanel extends React.Component {
                         null
                     }
                 </div>
+                    {this.renderConnectionStatus()}
                 <div>
-                    Server Connection Status: 
-                    <span className={this.props.connected ? 
-                        (this.props.heartbeat ? "connected status" : "disconnected status") : 
-                        "disconnected status"}>
-                        {this.props.connected ? 
-                            (this.props.heartbeat ? " Good" : " Bad") : 
-                            " Disconnected"}
-                    </span>
-                </div> 
-                <div>
-                    Hardware Connection Status:
+                    {this.renderHardwareConnectionStatus()}
                 </div>
             </div>
 

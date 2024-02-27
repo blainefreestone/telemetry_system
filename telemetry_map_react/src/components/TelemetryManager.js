@@ -14,7 +14,8 @@ class TelemetryManager extends React.Component {
             points: [],
             pointGraphics: [],
             connected: false,
-            heartbeat: false
+            heartbeat: false,
+            hardware: false
         }
     }
 
@@ -31,6 +32,8 @@ class TelemetryManager extends React.Component {
             });
 
             this.socket.on('heartbeat', (data) => {
+                let newState;
+
                 console.log('Heartbeat received ' + data.timestamp);
 
                 // clear the previous timeout as heartbeat was received
@@ -38,10 +41,10 @@ class TelemetryManager extends React.Component {
                 // set new timeout for next heartbeat
                 this.heartbeatTimeout = setTimeout(this.handleMissedHeartbeat, 2000);
 
+                data.hardware === true ? newState = {heartbeat: true, hardware: true} : newState = {heartbeat: true, hardware: false};
+
                 // set the heartbeat state to true
-                this.setState({
-                    heartbeat: true
-                });
+                this.setState(newState);
             });
             
             this.setState({
@@ -57,7 +60,9 @@ class TelemetryManager extends React.Component {
         this.socket.on('disconnect', () => {
             // set the state to disconnected if the connection is lost
             this.setState({
-                connected: false
+                connected: false,
+                hardware: false,
+                heartbeat: false
             });
 
             // stop trying to connect
@@ -140,6 +145,7 @@ class TelemetryManager extends React.Component {
                     requestData={this.requestData}
                     connected={this.state.connected}
                     heartbeat={this.state.heartbeat}
+                    hardware={this.state.hardware}
                 />
             </>
         )
