@@ -67,20 +67,7 @@ class MapComponent extends React.Component {
             this.map = new Map(basemapConfig);
 
             // Create the SceneView
-            this.view = new SceneView({
-                container: this.mapDiv.current,   // HTML element to place the map
-                map: this.map,
-                // starting position of the camera
-                camera: {
-                    position: [
-                        -118.80500, // lon
-                        34.02700,   // lat
-                        2500        // elevation in meters
-                    ],
-                    tilt: 65,
-                    heading: 360
-                }
-            });
+            this.view = new SceneView(mapConfig.getSceneViewConfig(this.mapDiv, this.map));
 
             // Create a graphics layer to hold the points and lines
             this.graphicsLayer = new GraphicsLayer();
