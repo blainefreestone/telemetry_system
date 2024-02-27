@@ -31,9 +31,15 @@ class ControlPanel extends React.Component {
         let show, divText, divClass;
 
         if (this.props.hardware && this.props.connected) {
-            show = true;
-            divText = " Good";
-            divClass = " connected status";
+            if (this.props.hardwareHeartbeat) {
+                show = true;
+                divText = " Good";
+                divClass = " connected status";
+            } else {
+                show = true;
+                divText = " Bad";
+                divClass = " disconnected status";
+            }
         } else if (this.props.connected) {
             show = true;
             divText = " Disconnected";

@@ -2,9 +2,9 @@ const startHardwareListener = (sendDataToClientCallback) => {
     // temporary test data function to simulate hardware data
     points = createArc(
         { x: -118.821527826096, y: 34.0139576938577 },  // start of arc
-        { x: -118.508878330345, y: 33.9816642996246 },  // end of arc
-        10000,                                          // max height of arc
-        100                                             // number of points in arc
+        { x: -118.508878330345, y: 31.9816642996246 },  // end of arc
+        20000,                                          // max height of arc
+        1000                                            // number of points in arc
     )
     points.forEach((point, index) => {
         setTimeout(() => {

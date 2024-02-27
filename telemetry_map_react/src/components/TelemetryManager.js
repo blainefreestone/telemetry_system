@@ -15,7 +15,8 @@ class TelemetryManager extends React.Component {
             pointGraphics: [],
             connected: false,
             heartbeat: false,
-            hardware: false
+            hardware: false,
+            hardwareHeartbeat: false
         }
     }
 
@@ -146,6 +147,7 @@ class TelemetryManager extends React.Component {
                     connected={this.state.connected}
                     heartbeat={this.state.heartbeat}
                     hardware={this.state.hardware}
+                    hardwareHeartbeat={this.state.hardwareHeartbeat}
                 />
             </>
         )

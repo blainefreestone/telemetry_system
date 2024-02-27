@@ -60,6 +60,6 @@ function sendPointDataToClient(data) {
 
 function sendHeartbeatToClient() {
     if (connectionSocket) {
-        connectionSocket.emit('heartbeat', {timestamp: Date.now(), hardware: false});
+        connectionSocket.emit('heartbeat', {timestamp: Date.now(), hardware: true, hardwareHeartbeat: false});
     }
 }
