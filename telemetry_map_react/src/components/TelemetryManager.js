@@ -16,7 +16,8 @@ class TelemetryManager extends React.Component {
             connected: false,
             heartbeat: false,
             hardware: false,
-            hardwareHeartbeat: false
+            hardwareHeartbeat: false,
+            serverHasFile: false
         }
     }
 
@@ -44,6 +45,13 @@ class TelemetryManager extends React.Component {
 
                 // set the heartbeat state to true
                 this.setState(newState);
+            });
+
+            this.socket.on('fileReceived', () => {
+                console.log('File received by server');
+                this.setState({
+                    serverHasFile: true
+                });
             });
             
             this.setState({
