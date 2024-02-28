@@ -35,8 +35,6 @@ class TelemetryManager extends React.Component {
             this.socket.on('heartbeat', (data) => {
                 let newState;
 
-                console.log('Heartbeat received ' + data.timestamp);
-
                 // clear the previous timeout as heartbeat was received
                 clearTimeout(this.heartbeatTimeout);
                 // set new timeout for next heartbeat
@@ -49,7 +47,9 @@ class TelemetryManager extends React.Component {
             });
             
             this.setState({
-                connected: true
+                connected: true,
+                points: [],
+                pointGraphics: []
             });
         });
         

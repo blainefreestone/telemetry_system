@@ -11,17 +11,18 @@ class MapComponent extends React.Component {
     constructor(props) {
         super(props);
         this.mapDiv = React.createRef();  // create a reference to the map div
+        this.hoverPointGraphic = null;    // create a reference to the point being hovered over
     }
 
     // add a new point to the state
-    addPoint = (pointGraphic) => {
+    addPoint = () => {
         // clear the graphics layer
         this.graphicsLayer.removeAll();
-
-        // add the points to the graphics layer
+        // add all the points to the graphics layer
         this.props.pointGraphics.forEach((pointGraphic) => {
             this.graphicsLayer.add(pointGraphic);
         });
+        // this.graphicsLayer.add(this.props.lastPointGraphic);
     }
 
     updateLine = (pointGraphics) => {
@@ -41,11 +42,38 @@ class MapComponent extends React.Component {
         this.graphicsLayer.add(lineGraphic);
     }
 
+    // check if the line is being hovered over
+    isHovered = (event) => {
+        this.view.hitTest(event).then((response) => {
+            if (response.results.length > 0 && response.results[0].graphic.geometry.type === "polyline") {
+                // remove the previous hover point graphic from the graphics layer
+                if (this.hoverPointGraphic) {
+                    this.graphicsLayer.remove(this.hoverPointGraphic);
+                }
+ 
+                let lineVertexIndex = response.results[0].vertexIndex;
+    
+                if (this.props.pointGraphics[lineVertexIndex]) {
+                    this.hoverPointGraphic = this.props.pointGraphics[lineVertexIndex];
+
+                    this.graphicsLayer.add(this.hoverPointGraphic);
+                }
+            }
+        });
+    }
+
     componentDidUpdate(prevProps) {
         // check if the pointGraphics prop has changed
         if (prevProps.pointGraphics !== this.props.pointGraphics) {
-            // update the points on the map
+            // update the last point on the map
             this.addPoint(this.props.lastPointGraphic);
+
+            if (this.hoverPointGraphic) {
+                console.log(this.hoverPointGraphic.geometry.x, this.hoverPointGraphic.geometry.y, this.hoverPointGraphic.geometry.z);
+                // update the hover point graphic
+                this.graphicsLayer.add(this.hoverPointGraphic);
+            }
+
             // update the line on the map
             this.updateLine(this.props.pointGraphics);
         }
@@ -56,6 +84,7 @@ class MapComponent extends React.Component {
             const {
                 apiKey,
                 basemapConfig,
+                getSceneViewConfig,
                 markerSymbol,
                 pointPopupTemplate,
                 lineSymbol
@@ -67,7 +96,7 @@ class MapComponent extends React.Component {
             this.map = new Map(basemapConfig);
 
             // Create the SceneView
-            this.view = new SceneView(mapConfig.getSceneViewConfig(this.mapDiv, this.map));
+            this.view = new SceneView(getSceneViewConfig(this.mapDiv, this.map));
 
             // Create a graphics layer to hold the points and lines
             this.graphicsLayer = new GraphicsLayer();
@@ -81,6 +110,9 @@ class MapComponent extends React.Component {
 
             // Create the style for the line
             this.lineSymbol = lineSymbol;
+
+            // Create event for hovering over the line
+            this.view.on("pointer-move", this.isHovered);
         }
     }
 
