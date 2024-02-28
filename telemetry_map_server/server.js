@@ -2,6 +2,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const { startHardwareListener } =  require('./hardware.js');
 const { start } = require('repl');
+const { saveDataToFile } = require('./dataHandler.js');
 
 // Create a new HTTP server
 const server = http.createServer();
@@ -34,7 +35,10 @@ io.on('connection', (socket) => {
     socket.on('fileData', (fileData) => {
         // log file data received
         console.log('File data received');
-        console.log(fileData.length);
+        // save the file data to a file in JSON format
+        saveDataToFile(fileData, 'currentData.json');
+        // send file received message to client
+        sendFileReceivedToClient();
     });
 
     // set up event listener for disconnections
@@ -67,5 +71,11 @@ function sendPointDataToClient(data) {
 function sendHeartbeatToClient() {
     if (connectionSocket) {
         connectionSocket.emit('heartbeat', {timestamp: Date.now(), hardware: true, hardwareHeartbeat: false});
+    }
+};
+
+function sendFileReceivedToClient() {
+    if (connectionSocket) {
+        connectionSocket.emit('fileReceived', {timestamp: Date.now()});
     }
 }
