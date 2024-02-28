@@ -1,6 +1,13 @@
 import React from 'react';
 
 class ControlPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            file: null
+        }
+    }
+    
     renderConnectionStatus = () => {
         let divText, divClass;
 
@@ -59,30 +66,41 @@ class ControlPanel extends React.Component {
             )
         }
     }
+
+    handleFileChange = (event) => {
+        // add file to state
+        this.setState({
+            file: event.target.files[0]
+        })
+    }
     
     render () {
         return (
             <div className="ControlPanel">
-                <div className="buttons">
-                    {this.props.connected ? 
-                        <button onClick={this.props.connectToServer} disabled>Connected</button> :
-                        <button onClick={this.props.connectToServer}>Connect to Server</button>
-                    }
-                    {this.props.connected ? 
-                        <button onClick={this.props.disconnectFromServer}>Disconnect from Server</button> :
-                        null
-                    }
-                    {this.props.connected ? 
-                        <button onClick={this.props.requestData}>Request Data</button> :
-                        null
-                    }
-                </div>
+                <div className="connection">
+                    <div className="buttons">
+                        {this.props.connected ? 
+                            <button onClick={this.props.connectToServer} disabled>Connected</button> :
+                            <button onClick={this.props.connectToServer}>Connect to Server</button>
+                        }
+                        {this.props.connected ? 
+                            <button onClick={this.props.disconnectFromServer}>Disconnect from Server</button> :
+                            null
+                        }
+                        {this.props.connected ? 
+                            <button onClick={this.props.requestData}>Request Data</button> :
+                            null
+                        }
+                    </div>
                     {this.renderConnectionStatus()}
-                <div>
                     {this.renderHardwareConnectionStatus()}
                 </div>
+                <div className="files">
+                    Upload file to server:
+                    <div><input type="file" accept=".json" onChange={this.handleFileChange} /></div>
+                    <div><button onClick={this.props.sendFileData} disabled={!this.state.file || !this.props.connected}>Send File</button></div>
+                </div>
             </div>
-
         )
     }
 }

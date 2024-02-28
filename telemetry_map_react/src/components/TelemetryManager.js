@@ -81,6 +81,27 @@ class TelemetryManager extends React.Component {
         this.socket.emit('trigger');
     }
 
+    sendFileData = () => {
+        const { file } = this.ControlPanel.state;
+
+        const fileReader = new FileReader();
+
+        // send the file when it has been read by the fileReader
+        fileReader.onload = (event) => {
+            // parse the JSON data from the file
+            const fileData = JSON.parse(event.target.result);
+
+            // send the file data to the server
+            this.socket.emit('fileData', fileData);
+
+            this.ControlPanel.setState({
+                file: null
+            });
+        }
+        // read the file as text
+        fileReader.readAsText(file);   
+    }
+
     handleDataReceived = (data) => {
         const point = this.createPoint(data);
         // add the new point to the state
@@ -144,10 +165,12 @@ class TelemetryManager extends React.Component {
                     connectToServer={this.connectToServer}
                     disconnectFromServer={this.disconnectFromServer}
                     requestData={this.requestData}
+                    sendFileData={this.sendFileData}
                     connected={this.state.connected}
                     heartbeat={this.state.heartbeat}
                     hardware={this.state.hardware}
                     hardwareHeartbeat={this.state.hardwareHeartbeat}
+                    ref = {ref => this.ControlPanel = ref}
                 />
             </>
         )
