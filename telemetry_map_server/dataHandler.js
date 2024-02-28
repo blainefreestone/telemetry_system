@@ -20,4 +20,4 @@ const loadDataFromFile = (filename) => {
     return JSON.parse(fs.readFileSync(filePath));
 }
 
-export default { saveDataToFile, loadDataFromFile };
+module.exports = { saveDataToFile, loadDataFromFile };

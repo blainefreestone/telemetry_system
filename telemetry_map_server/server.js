@@ -31,6 +31,12 @@ io.on('connection', (socket) => {
         startHardwareListener(sendPointDataToClient);
     });
 
+    socket.on('fileData', (fileData) => {
+        // log file data received
+        console.log('File data received');
+        console.log(fileData.length);
+    });
+
     // set up event listener for disconnections
     socket.on('disconnect', () => {
         // log disconnection
