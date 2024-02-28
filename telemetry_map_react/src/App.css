@@ -59,6 +59,12 @@ table td:nth-child(2) {
   height: 10%;
 }
 
+.ControlPanel {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
 .connected {
   color: #28a745;
 }
