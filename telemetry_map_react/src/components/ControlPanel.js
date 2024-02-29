@@ -80,15 +80,31 @@ class ControlPanel extends React.Component {
                 <div className="connection">
                     <div className="buttons">
                         {this.props.connected ? 
-                            <button onClick={this.props.connectToServer} disabled>Connected</button> :
-                            <button onClick={this.props.connectToServer}>Connect to Server</button>
+                            <button onClick={() => {
+                                if (window.confirm('Are you sure you want to connect to the server? Doing this will clear current map data.')) {
+                                    this.props.connectToServer();
+                                }
+                            }} disabled>Connected</button> :
+                            <button onClick={() => {
+                                if (window.confirm('Are you sure you want to connect to the server? Doing this will clear current map data.')) {
+                                    this.props.connectToServer();
+                                }
+                            }}>Connect to Server</button>
                         }
                         {this.props.connected ? 
-                            <button onClick={this.props.disconnectFromServer}>Disconnect from Server</button> :
+                            <button onClick={() => {
+                                if (window.confirm('Are you sure you want to disconnect from the server?')) {
+                                    this.props.disconnectFromServer();
+                                }
+                            }}>Disconnect from Server</button> :
                             null
                         }
                         {this.props.connected ? 
-                            <button onClick={this.props.requestData}>Request Data</button> :
+                            <button onClick={() => {
+                                if (window.confirm('Are you sure you want to request data?')) {
+                                    this.props.requestData();
+                                }
+                            }}>Request Data</button> :
                             null
                         }
                     </div>
