@@ -95,10 +95,14 @@ class ControlPanel extends React.Component {
                     {this.renderConnectionStatus()}
                     {this.renderHardwareConnectionStatus()}
                 </div>
-                <div className="files">
+                <div className="fileUpload">
                     Upload file to server:
                     <div><input type="file" accept=".json" onChange={this.handleFileChange} /></div>
                     <div><button onClick={this.props.sendFileData} disabled={!this.state.file || !this.props.connected}>Send File</button></div>
+                </div>
+                <div className="fileDownload">
+                    Download current map data:
+                    <div><button onClick={this.props.downloadDataAsFile}>Download</button></div>
                 </div>
             </div>
         )

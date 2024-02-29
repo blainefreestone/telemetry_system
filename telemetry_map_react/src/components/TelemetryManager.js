@@ -158,6 +158,16 @@ class TelemetryManager extends React.Component {
         this.pointPopupTemplate = mapConfig.pointPopupTemplate;
     }
 
+    downloadDataAsFile = () => {
+        const fileData = JSON.stringify(this.state.points);
+        const blob = new Blob([fileData], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = 'telemetryData.json';
+        link.href = url;
+        link.click();
+    }
+
     render() {
         // get the last point from the state if it exists
         const lastPoint = this.state.points.length > 0 ? this.state.points[this.state.points.length - 1] : null;
@@ -174,6 +184,7 @@ class TelemetryManager extends React.Component {
                     disconnectFromServer={this.disconnectFromServer}
                     requestData={this.requestData}
                     sendFileData={this.sendFileData}
+                    downloadDataAsFile={this.downloadDataAsFile}
                     connected={this.state.connected}
                     heartbeat={this.state.heartbeat}
                     hardware={this.state.hardware}
