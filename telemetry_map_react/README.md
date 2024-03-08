@@ -4,7 +4,7 @@ The React application is designed to showcase an interactive 3D map using the Ar
 
 This React application is part of a comprehensive project aimed at developing a real-time telemetry collection and display system. For details about the broader system, refer to the documentation [here](..). Additional information about the server can be found [here](./telemetry_map_server), and details regarding the telemetry circuit are available [here](./telemetry_circuit_sketch).
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/aQY_TF2zvu0)
 
 # How to Use
 
