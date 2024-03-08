@@ -34,17 +34,14 @@ Be aware that disconnecting from the server will reset all map data previously r
 
 4. **Node.js and npm:** Node.js and npm (Node Package Manager) are used for managing project dependencies and executing build scripts. npm facilitates the installation of third-party libraries and tools required for development and deployment.
 
-I developed this using the Visual Studio Code IDE
+This was developed using the Visual Studio Code IDE. 
 
 # Useful Websites
 
-{Make a list of websites that you found helpful in this project}
-* [Web Site Name](http://url.link.goes.here)
-* [Web Site Name](http://url.link.goes.here)
+* [ArcGIS Maps SDK for Javascript](http://url.link.goes.here](https://developers.arcgis.com/javascript/latest/)
 
 # Future Work
 
-{Make a list of things that you need to fix, improve, and add in the future.}
-* Item 1
-* Item 2
-* Item 3docs/troubleshooting#npm-run-build-fails-to-minify)
+* Improve map state saving functionality (currently can load to and save files from server).
+* Change line graphic to only display points when hovered over.
+* Change front point to animate and be different from the other points.
