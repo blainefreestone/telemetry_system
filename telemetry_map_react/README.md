@@ -1,70 +1,47 @@
-# Getting Started with Create React App
+# Overview
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The React application is designed to showcase an interactive 3D map using the ArcGIS API, dynamically updated with telemetry data received from a server. Users can observe real-time data and utilize button controls for managing connections and data reception within the application environment.
 
-## Available Scripts
+This React application is part of a comprehensive project aimed at developing a real-time telemetry collection and display system. For details about the broader system, refer to the documentation [here](..). Additional information about the server can be found [here](./telemetry_map_server), and details regarding the telemetry circuit are available [here](./telemetry_circuit_sketch).
 
-In the project directory, you can run:
+[Software Demo Video](https://youtu.be/aQY_TF2zvu0)
 
-### `npm start`
+# How to Use
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### To start this React application:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Ensure you have Node.js installed on your system.
+2. Open a terminal window and navigate to the root directory of your React application.
+3. Run the command `npm install` to install dependencies.
+4. Once the installation is complete, execute `npm start` to launch the development server.
+5. The React application should automatically open in your default web browser at `http://localhost:3000`.
 
-### `npm test`
+Before running, many useful assets from the ArcGIS API will be copied to the `public/assets` directory which is in the .gitignore file. These assets are important for the React application to run smoothly.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Connection with the server and receiving data:
 
-### `npm run build`
+The application is configured to communicate with the NodeJS server in this repo. With the server running, click the `Connect to Server` button to establish the connection.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Be aware that disconnecting from the server will reset all map data previously received from the server.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Language and Resources Used
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **JavaScript:** The application is primarily written in JavaScript, leveraging the React framework for building user interfaces and managing state.
 
-### `npm run eject`
+2. **ArcGIS API for JavaScript:** The ArcGIS API for JavaScript is utilized to incorporate powerful mapping and spatial analysis capabilities into the application. It provides access to mapping services, spatial data visualization, and geoprocessing functionalities.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. **React:** The React library is employed to create reusable components and efficiently manage the application's user interface. React's component-based architecture promotes modular development and enhances code maintainability.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. **Node.js and npm:** Node.js and npm (Node Package Manager) are used for managing project dependencies and executing build scripts. npm facilitates the installation of third-party libraries and tools required for development and deployment.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+This was developed using the Visual Studio Code IDE. 
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# Useful Websites
 
-## Learn More
+* [ArcGIS Maps SDK for Javascript](http://url.link.goes.here](https://developers.arcgis.com/javascript/latest/)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+# Future Work
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* Improve map state saving functionality (currently can load to and save files from server).
+* Change line graphic to only display points when hovered over.
+* Change front point to animate and be different from the other points.
