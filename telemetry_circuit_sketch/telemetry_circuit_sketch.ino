@@ -1,10 +1,14 @@
 #include "MPU9250.h"
+#include "MS5611.h"
 
 MPU9250 mpu;
+MS5611 MS5611(0x77);
 float quatX;
 float quatY;
 float quatZ;
 float quatW;
+float pressure;
+float temp;
 
 void setup() {
     Serial.begin(115200);
@@ -16,15 +20,23 @@ void setup() {
     // toggle automatic cleaning up of data
     mpu.ahrs(true);
 
-    // Calibrate accelerometer and gyroscope
-    Serial.println("Calibrating Accel / Gyro");
-    mpu.calibrateAccelGyro();
-    // Calibrate magnetometer
-    Serial.println("Calibrating Mag");
-    mpu.calibrateMag();
+    // MS5611.init();
+    // configure pressure sensor
+    if (MS5611.begin()) {
+      Serial.print("MS5611 Found");
+    }
+    else {
+      Serial.print("Not found");
+    }
+    delay(5000);
+
+    MS5611.reset(1);
+    // set sampling rate to ultra low for highest accuracy
+    MS5611.setOversampling(OSR_ULTRA_LOW);
 }
 
 void loop() {
+    // get orientation data from MPU
     if (mpu.update()) {
         quatX = mpu.getQuaternionX();
         quatY = mpu.getQuaternionY();
@@ -32,6 +44,7 @@ void loop() {
         quatW = mpu.getQuaternionW();
         quat2euler(quatX, quatY, quatZ, quatW);
     }
+    baro_data();
 }
 
 void quat2euler(float q0, float q1, float q2, float q3) {
@@ -44,4 +57,13 @@ void quat2euler(float q0, float q1, float q2, float q3) {
     Serial.print(pitch);
     Serial.print(",");
     Serial.println(yaw);
+}
+
+void baro_data() {
+    // get pressure data from baro
+    pressure = MS5611.getPressure();
+    temp = MS5611.getTemperature();
+    Serial.print(pressure);
+    Serial.print(",");
+    Serial.println(temp);
 }
