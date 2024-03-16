@@ -39,6 +39,18 @@ class RealTimeDataDisplay extends React.Component {
                                     <td>Altitude</td>
                                     <td>{this.state.point.z}m</td>
                                 </tr>
+                                <tr>
+                                    <td>Roll</td>
+                                    <td>{this.state.point.roll.toFixed(2)}°</td>
+                                </tr>
+                                <tr>
+                                    <td>Pitch</td>
+                                    <td>{this.state.point.pitch.toFixed(2)}°</td>
+                                </tr>
+                                <tr>
+                                    <td>Yaw</td>
+                                    <td>{this.state.point.yaw.toFixed(2)}°</td>
+                                </tr>
                             </>
                         ) : (
                             <>
@@ -54,12 +66,24 @@ class RealTimeDataDisplay extends React.Component {
                                     <td>Altitude</td>
                                     <td></td>
                                 </tr>
+                                <tr>
+                                    <td>Roll</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Pitch</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Yaw</td>
+                                    <td></td>
+                                </tr>
                             </>
                         )}
                     </tbody>
                 </table>
             </>
-        )
+        );
     }
 }
 

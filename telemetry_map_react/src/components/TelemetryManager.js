@@ -117,6 +117,7 @@ class TelemetryManager extends React.Component {
             points: [...prevState.points, point],
             pointGraphics: [...prevState.pointGraphics, this.createPointGraphic(point)]
         }));
+        console.log('Data received:', data);
     }
 
     handleMissedHeartbeat = () => {
@@ -131,7 +132,10 @@ class TelemetryManager extends React.Component {
             type: "point",
             x: pointData.x,
             y: pointData.y,
-            z: pointData.z
+            z: pointData.z,
+            roll: pointData.roll,
+            pitch: pointData.pitch,
+            yaw: pointData.yaw
         }
 
         return point;
@@ -140,13 +144,16 @@ class TelemetryManager extends React.Component {
     createPointGraphic = (point) => {
         // Create a graphic for the new point
         const pointGraphic = new Graphic({
-            geometry: point,
-            symbol: this.markerSymbol,
-            outFields: ["*"],
-            attributes: {
-            x: point.x,
-            y: point.y,
-            z: Math.round(point.z)
+                geometry: point,
+                symbol: this.markerSymbol,
+                outFields: ["*"],
+                attributes: {
+                x: point.x,
+                y: point.y,
+                z: Math.round(point.z),
+                roll: point.roll,
+                pitch: point.pitch,
+                yaw: point.yaw
             },
             popupTemplate: this.pointPopupTemplate,
         })
