@@ -1,22 +1,28 @@
+const { SerialPort } = require('serialport');
+const { ReadlineParser } = require('@serialport/parser-readline');
+
+// create serial port connection
+const serialPort = new SerialPort({
+    path: 'COM5',
+    baudRate: 9600
+});
+
+// create parser for serial port data to read by line
+const parser = serialPort.pipe(new ReadlineParser({ delimiter: '\n' }));
+
 const startHardwareListener = (sendDataToClientCallback) => {
-    // temporary test data function to simulate hardware data
-    points = createArc(
-        { x: -118.821527826096, y: 34.0139576938577 },  // start of arc
-        { x: -118.508878330345, y: 33.9816642996246 },  // end of arc
-        20000,                                          // max height of arc
-        100                                             // number of points in arc
-    )
-    points.forEach((point, index) => {
-        setTimeout(() => {
-            sendDataToClientCallback(point);
-        }, index * 100); // Wait half a second (500 milliseconds) for each point
+    // listen for lines of data from serial port
+    parser.on('data', (line) => {
+        // process line of serial data
+        const processedData = processHardwareData(line);
+        // send data to client
+        sendDataToClientCallback(processedData);
     });
-    
-    // TODO: serial connection with hardware here
 } 
 
 const processHardwareData = (data) => {
-    // TODO: functions and code to process hardware data here
+    // process data from hardware
+    return [roll, pitch, yaw] = data.split(',').map(Number);
 };
 
 // create dummy arc data for testing
