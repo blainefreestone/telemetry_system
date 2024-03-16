@@ -11,18 +11,38 @@ const serialPort = new SerialPort({
 const parser = serialPort.pipe(new ReadlineParser({ delimiter: '\n' }));
 
 const startHardwareListener = (sendDataToClientCallback) => {
+    // reset current line of serial data
+    let currentLine = '';
+
+    setInterval(() => {
+        if (currentLine !== '') {
+            // process current line of serial data
+            const processedData = processHardwareData(currentLine);
+            // send data to client
+            sendDataToClientCallback(processedData);
+            // reset current line
+            currentLine = '';
+        }
+    }, 100)
+
     // listen for lines of data from serial port
     parser.on('data', (line) => {
-        // process line of serial data
-        const processedData = processHardwareData(line);
-        // send data to client
-        sendDataToClientCallback(processedData);
+        currentLine = line;
     });
 } 
 
 const processHardwareData = (data) => {
     // process data from hardware
-    return [roll, pitch, yaw] = data.split(',').map(Number);
+    splitData = data.split(',').map(Number);
+    const processedData = {
+        roll: splitData[0],
+        pitch: splitData[1],
+        yaw: splitData[2],
+        x: splitData[3],
+        y: splitData[4],
+        z: splitData[5]
+    };
+    return processedData;
 };
 
 // create dummy arc data for testing
