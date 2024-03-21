@@ -33,15 +33,13 @@ const startHardwareListener = (comPort, sendDataToClientCallback) => {
 
 const processHardwareData = (data) => {
     // process data from hardware
-    splitData = data.split(',').map(Number);
+    let splitData = data.split(',').map(Number);
     if (splitData[5] === 0) splitData[5] = 1520;
     const processedData = {
-        roll: splitData[0],
-        pitch: splitData[1],
-        yaw: splitData[2],
-        y: splitData[3],
-        x: splitData[4],
-        z: splitData[5] + 20
+        time: splitData[0] / 1000,
+        y: splitData[1],
+        x: splitData[2],
+        z: splitData[3]
     };
     return processedData;
 };
