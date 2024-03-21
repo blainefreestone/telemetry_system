@@ -5,9 +5,9 @@ const getSceneViewConfig = (mapDiv, map) => {
         // starting position of the camera
         camera: {
             position: [
-                -118.80500, // lon
-                34.02700,   // lat
-                2500        // elevation in meters
+                -111.780792, // lon
+                43.822208,   // lat
+                1700        // elevation in meters
             ],
             tilt: 65,
             heading: 360
