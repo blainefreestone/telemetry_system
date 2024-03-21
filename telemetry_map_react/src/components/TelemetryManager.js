@@ -138,6 +138,7 @@ class TelemetryManager extends React.Component {
             x: pointData.x,
             y: pointData.y,
             z: pointData.z,
+            time: pointData.time,
             roll: pointData.roll,
             pitch: pointData.pitch,
             yaw: pointData.yaw

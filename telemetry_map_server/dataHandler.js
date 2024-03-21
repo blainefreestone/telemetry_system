@@ -24,14 +24,17 @@ const sendFileDataToClient = (filename, sendDataToClientCallback) => {
     // get current file data
     const fileData = loadDataFromFile(filename);
 
+    // get time of first data point
+    const firstDataPointTime = fileData.length > 0 ? fileData[0].time : 0;
+
     fileData.forEach((dataPoint, index) => {
         // calculate delay based on time of data point
-        const delayMiliseconds = dataPoint.time * 1000;
+        const delayMilliseconds = (dataPoint.time - firstDataPointTime) * 1000;
 
         setTimeout(() => {
             // send data point to client
             sendDataToClientCallback(dataPoint);
-        }, delayMiliseconds);
+        }, delayMilliseconds);
     });
 }
 
