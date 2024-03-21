@@ -104,7 +104,15 @@ class ControlPanel extends React.Component {
                                 if (window.confirm('Are you sure you want to request data?')) {
                                     this.props.requestData();
                                 }
-                            }}>Request Data</button> :
+                            }}>Receive Hardware Data</button> :
+                            null
+                        }
+                        {this.props.connected ? 
+                            <button onClick={() => {
+                                if (window.confirm('Are you sure you want to request data?')) {
+                                    this.props.requestFileData();
+                                }
+                            }}>Request File Data</button> :
                             null
                         }
                     </div>

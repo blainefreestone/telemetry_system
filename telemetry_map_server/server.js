@@ -2,7 +2,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const { startHardwareListener } =  require('./hardware.js');
 const { start } = require('repl');
-const { saveDataToFile } = require('./dataHandler.js');
+const { saveDataToFile, sendFileDataToClient } = require('./dataHandler.js');
 
 // Create a new HTTP server
 const server = http.createServer();
@@ -39,6 +39,12 @@ io.on('connection', (socket) => {
         saveDataToFile(fileData, 'currentData.json');
         // send file received message to client
         sendFileReceivedToClient();
+    });
+
+    socket.on('requestFileData', () => {
+        console.log('File data requested');
+        // send the file data to the client
+        sendFileDataToClient('currentData.json', sendPointDataToClient);
     });
 
     // set up event listener for disconnections

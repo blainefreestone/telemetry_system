@@ -89,6 +89,11 @@ class TelemetryManager extends React.Component {
         this.socket.emit('trigger');
     }
 
+    requestFileData = () => {
+        // request data from the server
+        this.socket.emit('requestFileData');
+    }
+
     sendFileData = () => {
         const { file } = this.ControlPanel.state;
 
@@ -144,19 +149,28 @@ class TelemetryManager extends React.Component {
     createPointGraphic = (point) => {
         // Create a graphic for the new point
         const pointGraphic = new Graphic({
-                geometry: point,
-                symbol: this.markerSymbol,
-                outFields: ["*"],
-                attributes: {
-                x: point.x,
-                y: point.y,
-                z: Math.round(point.z),
-                roll: point.roll,
-                pitch: point.pitch,
-                yaw: point.yaw
+            geometry: point,
+            symbol: this.markerSymbol,
+            outFields: ["*"],
+            attributes: {
+            x: point.x,
+            y: point.y,
+            roll: point.roll,
+            pitch: point.pitch,
+            yaw: point.yaw
             },
             popupTemplate: this.pointPopupTemplate,
-        })
+        });
+
+        if (point.z !== 0) {
+            pointGraphic.attributes.z = Math.round(point.z);
+        }
+        
+        if (point.roll || point.pitch || point.yaw) {
+            pointGraphic.attributes.roll = point.roll;
+            pointGraphic.attributes.pitch = point.pitch;
+            pointGraphic.attributes.yaw = point.yaw;
+        }
 
         return pointGraphic;
     }
@@ -190,6 +204,7 @@ class TelemetryManager extends React.Component {
                     connectToServer={this.connectToServer}
                     disconnectFromServer={this.disconnectFromServer}
                     requestData={this.requestData}
+                    requestFileData={this.requestFileData}
                     sendFileData={this.sendFileData}
                     downloadDataAsFile={this.downloadDataAsFile}
                     connected={this.state.connected}

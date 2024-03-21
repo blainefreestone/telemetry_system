@@ -20,17 +20,17 @@ const loadDataFromFile = (filename) => {
     return JSON.parse(fs.readFileSync(filePath));
 }
 
-const sendFileDataToClient = () => {
+const sendFileDataToClient = (filename, sendDataToClientCallback) => {
     // get current file data
-    const fileData = JSON.parse(loadDataFromFile('currentData.json'));
+    const fileData = loadDataFromFile(filename);
 
     fileData.forEach((dataPoint, index) => {
         // calculate delay based on time of data point
-        const delayMiliseconds = index === 0 ? 0 : (dataPoint.time - fileData[index - 1].time) * 1000;
+        const delayMiliseconds = dataPoint.time * 1000;
 
         setTimeout(() => {
             // send data point to client
-            sendPointDataToClient(dataPoint);
+            sendDataToClientCallback(dataPoint);
         }, delayMiliseconds);
     });
 }

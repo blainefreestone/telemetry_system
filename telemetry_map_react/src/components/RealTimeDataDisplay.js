@@ -29,27 +29,27 @@ class RealTimeDataDisplay extends React.Component {
                             <>
                                 <tr>
                                     <td>Longitude</td>
-                                    <td>{this.state.point.x}°</td>
+                                    <td>{this.state.point.x + '°' ? this.state.point.x : ''}</td>
                                 </tr>
                                 <tr>
                                     <td>Latitude</td>
-                                    <td>{this.state.point.y}°</td>
+                                    <td>{this.state.point.y + '°' ? this.state.point.y : ''}</td>
                                 </tr>
                                 <tr>
                                     <td>Altitude</td>
-                                    <td>{this.state.point.z}m</td>
+                                    <td>{this.state.point.z + '°' ? this.state.point.z : ''}</td>
                                 </tr>
                                 <tr>
                                     <td>Roll</td>
-                                    <td>{this.state.point.roll.toFixed(2)}°</td>
+                                    <td>{this.state.point.roll ? this.state.point.roll.toFixed(2) + '°' : ''}</td>
                                 </tr>
                                 <tr>
                                     <td>Pitch</td>
-                                    <td>{this.state.point.pitch.toFixed(2)}°</td>
+                                    <td>{this.state.point.pitch ? this.state.point.pitch.toFixed(2) + '°' : ''}</td>
                                 </tr>
                                 <tr>
                                     <td>Yaw</td>
-                                    <td>{this.state.point.yaw.toFixed(2)}°</td>
+                                    <td>{this.state.point.yaw ? this.state.point.yaw.toFixed(2) + '°' : ''}</td>
                                 </tr>
                             </>
                         ) : (
