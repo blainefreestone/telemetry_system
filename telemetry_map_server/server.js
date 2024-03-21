@@ -18,6 +18,16 @@ const io = socketIo(server, {
 // no connection socket yet
 let connectionSocket = null;
 
+// get serial port from command line arguments
+let comPort;
+if (process.argv.length > 2) {
+    console.log('COM port used: ' + process.argv[2]);
+    comPort = process.argv[2];
+} else {
+    console.log('Default COM port used: COM10');
+    comPort = 'COM10';
+}
+
 // set up event listener for new connections
 io.on('connection', (socket) => {
     // log new connection
@@ -29,7 +39,7 @@ io.on('connection', (socket) => {
         // log trigger received
         console.log('Trigger received');
         // start hardware listener
-        startHardwareListener(sendPointDataToClient);
+        startHardwareListener(comPort, sendPointDataToClient);
     });
 
     socket.on('fileData', (fileData) => {
