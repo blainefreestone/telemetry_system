@@ -3,6 +3,7 @@ const socketIo = require('socket.io');
 const { startHardwareListener } =  require('./hardware.js');
 const { start } = require('repl');
 const { saveDataToFile, sendFileDataToClient } = require('./dataHandler.js');
+const { clear } = require('console');
 
 // Create a new HTTP server
 const server = http.createServer();
@@ -63,6 +64,20 @@ io.on('connection', (socket) => {
         console.log('User disconnected');
         // reset connection socket to null
         connectionSocket = null;
+
+        // end server operations
+        endServerOperations();
+    });
+
+    // handle disconnections without disconnect event
+    socket.on('close', () => {
+        console.log('Client disconnected');
+
+        // reset connection socket to null
+        connectionSocket = null;
+
+        // end server operations
+        endServerOperations();
     });
 
     // set up heartbeat messages every second
@@ -94,4 +109,10 @@ function sendFileReceivedToClient() {
     if (connectionSocket) {
         connectionSocket.emit('fileReceived', {timestamp: Date.now()});
     }
+}
+
+function endServerOperations() {
+    // stop sending heartbeat messages
+    clearInterval(heartbeatInterval);
+    heartbeatInterval = null;
 }
