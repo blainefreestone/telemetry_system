@@ -117,6 +117,14 @@ class TelemetryManager extends React.Component {
 
     handleDataReceived = (data) => {
         const point = this.createPoint(data);
+        // check if data received is within 10% of the last point
+        if (this.state.points.length > 0) {
+            const lastPoint = this.state.points[this.state.points.length - 1];
+            if (Math.abs(point.x - lastPoint.x) > 0.1 && Math.abs(point.y - lastPoint.y) > 0.1 && Math.abs(point.z - lastPoint.z) > 0.1) {
+                return;
+            }
+        }
+
         // add the new point to the state
         this.setState(prevState => ({
             points: [...prevState.points, point],
